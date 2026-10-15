@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marco 大王驾到</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Arial",
+        "Microsoft YaHei", sans-serif;
+      color: white;
+      background:
+        radial-gradient(circle at top, #633d91, transparent 55%),
+        linear-gradient(135deg, #171225, #302047);
+      overflow: hidden;
+    }
+
+    .card {
+      width: min(90%, 440px);
+      padding: 42px 25px;
+      text-align: center;
+      border: 1px solid #e6c66b;
+      border-radius: 24px;
+      background: rgba(28, 21, 43, 0.95);
+      box-shadow: 0 15px 60px #0006;
+    }
+
+    .crown {
+      font-size: 76px;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: 29px;
+      margin: 15px 0;
+      color: #f7d779;
+    }
+
+    p {
+      color: #d7cce7;
+      line-height: 1.8;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.03);
+    }
+
+    .yes {
+      color: #302047;
+      background: linear-gradient(135deg, #ffe9a3, #e6bc4f);
+    }
+
+    .no {
+      color: white;
+      background: #49375e;
+      border: 1px solid #806a98;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: #0009;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .popup {
+      width: min(100%, 350px);
+      padding: 28px 22px;
+      border-radius: 20px;
+      text-align: center;
+      color: #302047;
+      background: #fff9e9;
+      animation: pop 0.25s ease-out;
+    }
+
+    .popup h2 {
+      font-size: 24px;
+    }
+
+    .popup p {
+      color: #665674;
+    }
+
+    .popup button {
+      color: white;
+      background: #7650a0;
+    }
+
+    .popup .give-up {
+      color: #302047;
+      background: #f1d88d;
+    }
+
+    .close {
+      display: block;
+      margin: 14px auto 0;
+      padding: 5px;
+      width: auto;
+      color: #806f8b !important;
+      background: transparent !important;
+      font-size: 13px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes float {
+      50% { transform: translateY(-9px) rotate(4deg); }
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card" id="mainCard">
+    <div class="crown">👑</div>
+    <h1>给 Marco 大王跪下！</h1>
+    <p>大胆！见到 Marco 大王还不行礼？<br>
+      现在给你两个选择。</p>
+
+    <button class="yes" onclick="kneel()">
+      🙇 跪下
+    </button>
+
+    <button class="no" onclick="refuse()">
+      😎 不跪下
+    </button>
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="popup">
+      <div style="font-size:48px">😈</div>
+      <h2 id="popupTitle">你必须跪下！</h2>
+      <p id="popupText">你确定要违抗 Marco 大王？</p>
+
+      <button onclick="refuseAgain()">
+        我就不跪！
+      </button>
+
+      <button class="give-up" onclick="kneel()">
+        好吧，我跪
+      </button>
+
+      <button class="close" onclick="closePopup()">
+        暂时退出整蛊
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let count = 0;
+
+    const messages = [
+      ["你必须跪下！", "大胆！再给你一次机会！"],
+      ["你一定要跪！", "Marco 大王正在看着你 👀"],
+      ["还不跪？", "你的倔强毫无意义！😂"],
+      ["最后一次机会！", "真的不考虑一下吗？"],
+      ["王命不可违！", "你已经连续拒绝很多次了！"],
+      ["别挣扎啦！", "哈哈哈哈，你又回来了！"]
+    ];
+
+    function refuse() {
+      document.getElementById("modal").classList.add("show");
+    }
+
+    function refuseAgain() {
+      count++;
+
+      const message = messages[(count - 1) % messages.length];
+
+      document.getElementById("popupTitle").textContent = message[0];
+      document.getElementById("popupText").textContent = message[1];
+
+      const popup = document.querySelector(".popup");
+      popup.style.animation = "none";
+      void popup.offsetWidth;
+      popup.style.animation = "pop 0.25s ease-out";
+    }
+
+    function closePopup() {
+      document.getElementById("modal").classList.remove("show");
+    }
+
+    function kneel() {
+      closePopup();
+
+      document.getElementById("mainCard").innerHTML = `
+        <div class="crown">👑</div>
+        <h1>恭喜你！</h1>
+        <p>你已正式成为<br>
+        <strong style="color:#f7d779">Marco 大王</strong><br>
+        的忠实臣民！</p>
+        <div style="font-size:60px;margin:20px">🙇‍♂️</div>
+        <button class="yes" onclick="restart()">
+          重新挑战
+        </button>
+      `;
+    }
+
+    function restart() {
+      count = 0;
+      location.reload();
+    }
+  </script>
+</body>
+</html>
